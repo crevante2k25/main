@@ -58,6 +58,6 @@
             "dev": "vite",
             "build": "vite build",
             "deploy": "gh-pages -d build"
-      },
-      "homepage": "https://Praveen7123.github.io/mba"
+      },``
+      "homepage": "https://crevante2k25.git``hub.io/main"
 }
