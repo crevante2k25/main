@@ -1,14 +1,14 @@
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { useState } from 'react';
-import { 
-  Calendar, 
-  Users, 
-  Trophy, 
-  GamepadIcon, 
-  MapPin, 
-  Music, 
-  Video, 
-  Phone, 
+import {
+  Calendar,
+  Users,
+  Trophy,
+  GamepadIcon,
+  MapPin,
+  Music,
+  Video,
+  Phone,
   Mail,
   ExternalLink,
   Star,
@@ -37,131 +37,118 @@ import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
 import { Badge } from './components/ui/badge';
 import { ImageWithFallback } from './components/figma/ImageWithFallback';
 
-export default function App() {
-  const [selectedDay, setSelectedDay] = useState(2);
-  const [currentPage, setCurrentPage] = useState('home');
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
+const App = () => {
+  // Smooth scroll to section
   const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
+  // Navigation and state
+  const [selectedDay, setSelectedDay] = useState(1);
+  const [currentPage, setCurrentPage] = useState<'home' | 'event-detail' | 'jury'>('home');
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
 
+  // Navigation handlers
   const handleEventClick = (event: any) => {
     setSelectedEvent(event);
     setCurrentPage('event-detail');
   };
-
-  const handleJuryClick = () => {
-    setCurrentPage('jury');
-  };
-
   const goBackToHome = () => {
     setCurrentPage('home');
     setSelectedEvent(null);
   };
-
+  const handleJuryClick = () => {
+    setCurrentPage('jury');
+  };
   const goBackToEvent = () => {
     setCurrentPage('event-detail');
   };
 
-  const day1Events = [
-    {
-      title: "AD-O-LOGY (ADZAP)",
-      prize: "TBA",
-      icon: TrendingUp,
-      description: "Brandstrom - Creative advertising challenge",
-      color: "from-blue-400 to-cyan-500",
-      fullDescription: "Showcase your creativity and marketing skills in this dynamic advertising competition. Create compelling ad campaigns that capture attention and drive results.",
-      rules: [
-        "Team size: 2-4 members",
-        "Time limit: 2 hours for campaign creation",
-        "All mediums allowed (digital, print, video)",
-        "Original concepts only"
-      ],
-      contact: "Marketing Coordinator: +91 9876543210",
-      posterUrl: "https://example.com/poster-adzap.jpg"
-    },
-    {
-      title: "PLANOVATE (B PLAN)",
-      prize: "TBA",
-      icon: Briefcase,
-      description: "Business plan competition",
-      color: "from-green-400 to-teal-500",
-      fullDescription: "Present your innovative business ideas and entrepreneurial vision. Develop comprehensive business plans that showcase market potential and feasibility.",
-      rules: [
-        "Team size: 3-5 members",
-        "15-minute presentation + 5 min Q&A",
-        "Business plan submission required",
-        "Focus on innovation and sustainability"
-      ],
-      contact: "Business Coordinator: +91 9876543211",
-      posterUrl: "https://example.com/poster-bplan.jpg"
-    },
-    {
-      title: "CROWN THE BOSS",
-      prize: "TBA",
-      icon: Crown,
-      description: "Best Manager Challenge",
-      color: "from-purple-400 to-pink-500",
-      fullDescription: "Demonstrate your leadership and management skills through strategic challenges and case studies. Prove you have what it takes to be the best manager.",
-      rules: [
-        "Individual competition",
-        "Multiple rounds of challenges",
-        "Case study analysis required",
-        "Leadership skills assessment"
-      ],
-      contact: "Management Coordinator: +91 9876543212",
-      posterUrl: "https://example.com/poster-bestmanager.jpg"
-    },
-    {
-      title: "BIZWHIZ",
-      prize: "TBA",
-      icon: Brain,
-      description: "Business Quiz Competition",
-      color: "from-orange-400 to-red-500",
-      fullDescription: "Test your business knowledge and current affairs awareness in this comprehensive quiz competition covering various business domains.",
-      rules: [
-        "Team size: 2-3 members",
-        "Multiple rounds: Prelims, Semi-finals, Finals",
-        "Topics: Business, Finance, Current Affairs",
-        "Buzzer round in finals"
-      ],
-      contact: "Quiz Coordinator: +91 9876543213",
-      posterUrl: "https://example.com/poster-bizquiz.jpg"
-    },
-    {
-      title: "SCHOLAR SPARK",
-      prize: "TBA",
-      icon: FileText,
-      description: "Paper Presentation",
-      color: "from-indigo-400 to-purple-500",
-      fullDescription: "Present your research and innovative ideas through comprehensive paper presentations. Share your academic insights and technical expertise.",
-      rules: [
-        "Individual or team (max 2 members)",
-        "15-minute presentation + 5 min Q&A",
-        "Abstract submission deadline: 27.10.25",
-        "Technical or business topics"
-      ],
-      contact: "Academic Coordinator: +91 9876543214",
-      posterUrl: "https://example.com/poster-scholar.jpg"
-    },
-    {
-      title: "MODERN WALK",
-      prize: "TBA",
-      icon: Eye,
-      description: "Solo Entry Competition",
-      color: "from-cyan-400 to-blue-500",
-      fullDescription: "Individual showcase of talent and vision. Demonstrate your unique perspective and skills in this solo competition format.",
-      rules: [
-        "Individual participation only",
-        "Open category - showcase any talent",
-        "Time limit: 5-8 minutes",
-        "Original content preferred"
-      ],
-      contact: "Solo Event Coordinator: +91 9876543215",
-      posterUrl: "https://example.com/poster-modernwalk.jpg"
-    }
-  ];
+// Day 1 Events
+const day1Events = [
+  {
+    title: "BRANDSTORM",
+    prize: "TBA",
+    icon: Briefcase,
+    description: "Business Plan Competition",
+    color: "from-cyan-400 to-blue-500",
+    fullDescription: "Present your innovative business ideas and plans to a panel of judges. Compete with the best minds and win exciting prizes.",
+    rules: [
+      "Team size: 2-4 members",
+      "Presentation time: 10 minutes",
+      "Q&A: 5 minutes",
+      "Focus on innovation and sustainability"
+    ],
+    contact: "Business Coordinator: +91 9876543211",
+    posterUrl: "https://example.com/poster-bplan.jpg"
+  },
+  {
+    title: "CROWN THE BOSS",
+    prize: "TBA",
+    icon: Crown,
+    description: "Best Manager Challenge",
+    color: "from-purple-400 to-pink-500",
+    fullDescription: "Demonstrate your leadership and management skills through strategic challenges and case studies. Prove you have what it takes to be the best manager.",
+    rules: [
+      "Individual competition",
+      "Multiple rounds of challenges",
+      "Case study analysis required",
+      "Leadership skills assessment"
+    ],
+    contact: "Management Coordinator: +91 9876543212",
+    posterUrl: "https://example.com/poster-bestmanager.jpg"
+  },
+  {
+    title: "BIZWHIZ",
+    prize: "TBA",
+    icon: Brain,
+    description: "Business Quiz Competition",
+    color: "from-orange-400 to-red-500",
+    fullDescription: "Test your business knowledge and current affairs awareness in this comprehensive quiz competition covering various business domains.",
+    rules: [
+      "Team size: 2-3 members",
+      "Multiple rounds: Prelims, Semi-finals, Finals",
+      "Topics: Business, Finance, Current Affairs",
+      "Buzzer round in finals"
+    ],
+    contact: "Quiz Coordinator: +91 9876543213",
+    posterUrl: "https://example.com/poster-bizquiz.jpg"
+  },
+  {
+    title: "SCHOLAR SPARK",
+    prize: "TBA",
+    icon: FileText,
+    description: "Paper Presentation",
+    color: "from-indigo-400 to-purple-500",
+    fullDescription: "Present your research and innovative ideas through comprehensive paper presentations. Share your academic insights and technical expertise.",
+    rules: [
+      "Individual or team (max 2 members)",
+      "15-minute presentation + 5 min Q&A",
+      "Abstract submission deadline: 27.10.25",
+      "Technical or business topics"
+    ],
+    contact: "Academic Coordinator: +91 9876543214",
+    posterUrl: "https://example.com/poster-scholar.jpg"
+  },
+  {
+    title: "MODERN WALK",
+    prize: "TBA",
+    icon: Eye,
+    description: "Solo Entry Competition",
+    color: "from-cyan-400 to-blue-500",
+    fullDescription: "Individual showcase of talent and vision. Demonstrate your unique perspective and skills in this solo competition format.",
+    rules: [
+      "Individual participation only",
+      "Open category - showcase any talent",
+      "Time limit: 5-8 minutes",
+      "Original content preferred"
+    ],
+    contact: "Solo Event Coordinator: +91 9876543215",
+    posterUrl: "https://example.com/poster-modernwalk.jpg"
+  }
+];
 
   const day2Events = [
     {
@@ -428,190 +415,197 @@ export default function App() {
     </div>
   );
 
-  // Event Detail Page Component
-  const EventDetailPage = ({ event }: { event: any }) => (
-    <div className="min-h-screen bg-gray-900 text-white overflow-x-hidden">
-      {/* Animated Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -inset-10 opacity-50">
-          <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-          <div className="absolute top-0 -right-4 w-72 h-72 bg-cyan-300 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000"></div>
-          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-4000"></div>
-        </div>
-      </div>
 
-      <div className="relative z-10 py-20 px-4">
-        <div className="max-w-4xl mx-auto">
-          {/* Back Button */}
-          <motion.button
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            onClick={goBackToHome}
-            className="mb-8 flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors"
-          >
-            <ArrowLeft size={20} />
-            Back to Events
-          </motion.button>
 
-          {/* Event Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <div className={`w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r ${event.color} flex items-center justify-center`}>
-              <event.icon size={40} className="text-white" />
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-              {event.title}
-            </h1>
-            <p className="text-xl text-gray-300">{event.description}</p>
-          </motion.div>
-
-          {/* Event Poster Space */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mb-12 text-center"
-          >
-            <div className="relative inline-block">
-              <div className="w-full max-w-2xl mx-auto h-96 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-2xl shadow-2xl flex items-center justify-center border border-white/10">
-                <img
-                  src="/images/Frame 36.png"
-                  alt="Event Poster"
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Event Details */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Description */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <Card className="backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-cyan-400">About This Event</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-300 leading-relaxed mb-6">
-                    {event.fullDescription}
-                  </p>
-                  <div className="flex items-center gap-2 text-green-400">
-                    <Trophy size={20} />
-                    <span className="text-xl font-semibold">Prize: {event.prize}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Rules */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <Card className="backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-purple-400">Rules & Guidelines</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3">
-                    {event.rules.map((rule: string, index: number) => (
-                      <li key={index} className="flex items-start gap-3 text-gray-300">
-                        <div className="w-2 h-2 bg-cyan-400 rounded-full mt-2 flex-shrink-0"></div>
-                        <span>{rule}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            </motion.div>
+  // Event Detail Page Component (for Day 2 posters)
+  const EventDetailPage = ({ event }: { event: any }) => {
+    // Dynamically resolve poster file based on event title
+    // Normalize event title to match file names (remove spaces, special chars, uppercase)
+    const normalize = (str: string) => str.replace(/[^A-Za-z0-9]/g, '_').toUpperCase();
+    const posterFileName = normalize(event.title) + '.png';
+    let posterSrc = '';
+    try {
+      posterSrc = new URL(`./posters/${posterFileName}`, import.meta.url).href;
+    } catch (e) {
+      posterSrc = '';
+    }
+    return (
+      <div className="min-h-screen bg-gray-900 text-white overflow-x-hidden">
+        {/* Animated Background */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -inset-10 opacity-50">
+            <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+            <div className="absolute top-0 -right-4 w-72 h-72 bg-cyan-300 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000"></div>
+            <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-4000"></div>
           </div>
-
-          {/* Contact & Jury */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-            {/* Contact */}
+        </div>
+        <div className="relative z-10 py-20 px-4">
+          <div className="max-w-4xl mx-auto">
+            {/* Back Button */}
+            <motion.button
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              onClick={goBackToHome}
+              className="mb-8 flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors"
+            >
+              <ArrowLeft size={20} />
+              Back to Events
+            </motion.button>
+            {/* Event Header */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-12"
             >
-              <Card className="backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-orange-400 text-center">Contact Information</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <div className="flex items-center justify-center gap-2 text-lg text-gray-300">
-                    <Phone size={20} className="text-green-400" />
-                    <span>{event.contact}</span>
-                  </div>
-                </CardContent>
-              </Card>
+              <div className={`w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r ${event.color} flex items-center justify-center`}>
+                <event.icon size={40} className="text-white" />
+              </div>
+              <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                {event.title}
+              </h1>
+              <p className="text-xl text-gray-300">{event.description}</p>
             </motion.div>
-
-            {/* Jury Information */}
-            {event.hasJury && (
+            {/* Event Poster Space (Day 2 only) */}
+            {posterSrc && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.7 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="mb-12 text-center"
               >
-                <Card className="backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl hover:border-orange-500/30 transition-all duration-300 cursor-pointer" onClick={handleJuryClick}>
+                <div className="relative inline-block">
+                  <div className="w-full max-w-2xl mx-auto h-96 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-800 rounded-2xl shadow-2xl flex items-center justify-center border border-white/10">
+                    <img
+                      src={posterSrc}
+                      alt="Event Poster"
+                      className="w-auto h-80 object-contain rounded-xl shadow-lg border border-white/10"
+                      onError={e => { e.currentTarget.style.display = 'none'; }}
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+            {/* Event Details */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Description */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                <Card className="backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
                   <CardHeader>
-                    <CardTitle className="text-2xl text-orange-400 text-center">Expert Jury Panel</CardTitle>
+                    <CardTitle className="text-2xl text-cyan-400">About This Event</CardTitle>
                   </CardHeader>
-                  <CardContent className="text-center">
-                    <div className="flex items-center justify-center gap-2 text-lg text-gray-300 mb-4">
-                      <UserCheck size={20} className="text-cyan-400" />
-                      <span>Professional judges with expertise</span>
+                  <CardContent>
+                    <p className="text-gray-300 leading-relaxed mb-6">
+                      {event.fullDescription}
+                    </p>
+                    <div className="flex items-center gap-2 text-green-400">
+                      <Trophy size={20} />
+                      <span className="text-xl font-semibold">Prize: {event.prize}</span>
                     </div>
-                    <Button 
-                      size="sm"
-                      className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white"
-                    >
-                      Meet the Jury →
-                    </Button>
                   </CardContent>
                 </Card>
               </motion.div>
-            )}
-          </div>
-
-          {/* Register Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-center mt-12"
-          >
-            <Button 
-              size="lg"
-              className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white px-12 py-4 text-lg font-semibold shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105"
+              {/* Rules */}
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                <Card className="backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
+                  <CardHeader>
+                    <CardTitle className="text-2xl text-purple-400">Rules & Guidelines</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-3">
+                      {event.rules && event.rules.map((rule: string, index: number) => (
+                        <li key={index} className="flex items-start gap-3 text-gray-300">
+                          <div className="w-2 h-2 bg-cyan-400 rounded-full mt-2 flex-shrink-0"></div>
+                          <span>{rule}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+            {/* Contact & Jury */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+              {/* Contact */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+              >
+                <Card className="backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl">
+                  <CardHeader>
+                    <CardTitle className="text-2xl text-orange-400 text-center">Contact Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <div className="flex items-center justify-center gap-2 text-lg text-gray-300">
+                      <Phone size={20} className="text-green-400" />
+                      <span>{event.contact}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+              {/* Jury Information (if any) */}
+              {event.hasJury && (
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.7 }}
+                >
+                  <Card className="backdrop-blur-lg bg-white/5 border border-white/10 shadow-2xl hover:border-orange-500/30 transition-all duration-300 cursor-pointer" onClick={handleJuryClick}>
+                    <CardHeader>
+                      <CardTitle className="text-2xl text-orange-400 text-center">Expert Jury Panel</CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-center">
+                      <div className="flex items-center justify-center gap-2 text-lg text-gray-300 mb-4">
+                        <UserCheck size={20} className="text-cyan-400" />
+                        <span>Professional judges with expertise</span>
+                      </div>
+                      <Button 
+                        size="sm"
+                        className="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white"
+                      >
+                        Meet the Jury →
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </div>
+            {/* Register Button */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="text-center mt-12"
             >
-              <Sparkles className="mr-2" size={20} />
-              Register Now
-            </Button>
-          </motion.div>
+              <Button 
+                size="lg"
+                className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white px-12 py-4 text-lg font-semibold shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105"
+              >
+                <Sparkles className="mr-2" size={20} />
+                Register Now
+              </Button>
+            </motion.div>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   if (currentPage === 'event-detail' && selectedEvent) {
     return <EventDetailPage event={selectedEvent} />;
   }
-
   if (currentPage === 'jury') {
     return <JuryPage />;
   }
-
   return (
     <div className="min-h-screen bg-gray-900 text-white overflow-x-hidden">
       {/* Animated Background */}
@@ -1025,4 +1019,5 @@ export default function App() {
       </section>
     </div>
   );
-}
+};
+export default App;

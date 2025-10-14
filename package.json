@@ -1,5 +1,5 @@
 {
-      "name": "Landing Page for CREVANTE 2K25",
+      "name": "crevante-landing-page",
       "version": "0.1.0",
       "private": true,
       "dependencies": {
@@ -57,7 +57,8 @@
       "scripts": {
             "dev": "vite",
             "build": "vite build",
-            "deploy": "gh-pages -d build"
-      },``
-      "homepage": "https://crevante2k25.git``hub.io/main"
+            "deploy": "gh-pages -d build",
+            "start": "vite"
+      },
+      "homepage": "https://crevante2k25.github.io/main"
 }
