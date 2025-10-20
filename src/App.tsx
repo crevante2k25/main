@@ -72,6 +72,7 @@ const day1Events = [
     title: "BRANDSTORM",
     prize: "TBA",
     icon: Briefcase,
+    image: "./posters/BRANDSTORM.png",
     description: "Business Plan Competition",
     color: "from-cyan-400 to-blue-500",
     fullDescription: "Present your innovative business ideas and plans to a panel of judges. Compete with the best minds and win exciting prizes.",
@@ -88,6 +89,7 @@ const day1Events = [
     title: "CROWN THE BOSS",
     prize: "TBA",
     icon: Crown,
+    image: "./posters/CROWN_THE_BOSS.png",
     description: "Best Manager Challenge",
     color: "from-purple-400 to-pink-500",
     fullDescription: "Demonstrate your leadership and management skills through strategic challenges and case studies. Prove you have what it takes to be the best manager.",
@@ -104,6 +106,7 @@ const day1Events = [
     title: "BIZWHIZ",
     prize: "TBA",
     icon: Brain,
+    image: "./posters/BIZWHIZ.png",
     description: "Business Quiz Competition",
     color: "from-orange-400 to-red-500",
     fullDescription: "Test your business knowledge and current affairs awareness in this comprehensive quiz competition covering various business domains.",
@@ -120,6 +123,7 @@ const day1Events = [
     title: "SCHOLAR SPARK",
     prize: "TBA",
     icon: FileText,
+    image: "./posters/SCHOLAR-SPARK.png",
     description: "Paper Presentation",
     color: "from-indigo-400 to-purple-500",
     fullDescription: "Present your research and innovative ideas through comprehensive paper presentations. Share your academic insights and technical expertise.",
@@ -136,6 +140,7 @@ const day1Events = [
     title: "MODERN WALK",
     prize: "TBA",
     icon: Eye,
+    image: "./posters/corporate_walk.jpeg",
     description: "Solo Entry Competition",
     color: "from-cyan-400 to-blue-500",
     fullDescription: "Individual showcase of talent and vision. Demonstrate your unique perspective and skills in this solo competition format.",
@@ -155,6 +160,7 @@ const day1Events = [
       title: "Short Film",
       prize: "₹1000",
       icon: Video,
+      image: "./posters/cineignite.jpeg",
       description: "Showcase your cinematic vision",
       color: "from-cyan-400 to-blue-500",
       fullDescription: "Create compelling short films that tell powerful stories. Showcase your filmmaking skills, creativity, and technical expertise.",
@@ -171,6 +177,7 @@ const day1Events = [
       title: "Esports",
       prize: "₹1000",
       icon: GamepadIcon,
+      image: "./posters/Esports.jpeg",
       description: "4 members per team",
       color: "from-purple-400 to-pink-500",
       fullDescription: "Compete in popular gaming tournaments and prove your gaming skills. Team up with friends for the ultimate gaming challenge.",
@@ -187,6 +194,7 @@ const day1Events = [
       title: "Treasure Hunt",
       prize: "₹1500",
       icon: MapPin,
+      image: "./posters/Treasure_hunt.jpeg",
       description: "3 members per team",
       color: "from-green-400 to-cyan-500",
       fullDescription: "Solve clues, crack puzzles, and navigate through challenges in this exciting treasure hunt across the campus.",
@@ -203,6 +211,7 @@ const day1Events = [
       title: "Group Dance",
       prize: "₹1250 & ₹750",
       icon: Users,
+      image: "./posters/Beat-o-battle.jpeg",
       description: "3-8 members per team",
       color: "from-pink-400 to-rose-500",
       fullDescription: "Express yourself through dance with your team. Showcase choreography, synchronization, and creative expression.",
@@ -214,12 +223,13 @@ const day1Events = [
       ],
       contact: "Dance Coordinator: +91 9876543219",
       hasJury: true,
-      posterUrl: "https://example.com/poster-groupdance.jpg"
+      posterUrl: ""
     },
     {
       title: "Adaptune",
       prize: "₹1000 & ₹500",
       icon: Music,
+      image: "./posters/vibeclash.jpeg",
       description: "Individual",
       color: "from-yellow-400 to-orange-500",
       fullDescription: "Adapt and perform songs in your unique style. Show your musical versatility and creativity in this adaptation challenge.",
@@ -237,6 +247,7 @@ const day1Events = [
       title: "Solo Dance",
       prize: "₹500",
       icon: Star,
+      image: "./posters/solosparks.jpeg",
       description: "Individual performance",
       color: "from-indigo-400 to-purple-500",
       fullDescription: "Showcase your individual dance skills and creativity. Express your personality through movement and rhythm.",
@@ -254,6 +265,7 @@ const day1Events = [
       title: "Singing Solo",
       prize: "₹500",
       icon: Music,
+      image: "./posters/solo-sinnging.jpeg",
       description: "Individual",
       color: "from-blue-400 to-cyan-500",
       fullDescription: "Showcase your vocal talents in this solo singing competition. Perform your favorite songs and mesmerize the audience.",
@@ -271,6 +283,7 @@ const day1Events = [
       title: "Singing Group",
       prize: "₹1000",
       icon: Users,
+      image: "./posters/solo-sinnging.jpeg",
       description: "Group performance",
       color: "from-teal-400 to-green-500",
       fullDescription: "Harmonize with your team in this group singing competition. Show teamwork, vocal coordination, and musical creativity.",
@@ -287,6 +300,65 @@ const day1Events = [
   ];
 
   const currentEvents = selectedDay === 1 ? day1Events : day2Events;
+
+  // Helper: normalize title -> filename
+  const normalize = (str: string) => str.replace(/[^A-Za-z0-9]/g, '_').toUpperCase();
+
+  // Resolve poster path automatically:
+  // - If event.image or event.posterUrl is an absolute URL or starts with '/', return as-is
+  // - If it's a relative filename, try bundler resolution via new URL(..., import.meta.url)
+  // - If neither provided, fallback to ./posters/<NORMALIZED_TITLE>.png via import.meta.url
+  const resolvePoster = (event: any) => {
+    const candidate = event?.image ?? event?.posterUrl ?? '';
+    // If explicit candidate exists
+    if (candidate) {
+      // absolute URL or protocol-relative
+      if (/^(https?:)?\/\//.test(candidate) || candidate.startsWith('/')) return candidate;
+      // try bundler relative resolution
+      try {
+        return new URL(candidate, import.meta.url).href;
+      } catch (e) {
+        // try as file under ./posters/
+        try {
+          return new URL(`./posters/${candidate}`, import.meta.url).href;
+        } catch (e2) {
+          return candidate;
+        }
+      }
+    }
+
+    // fallback: resolve by event title
+    try {
+      const posterFileName = normalize(event.title) + '.png';
+      return new URL(`./posters/${posterFileName}`, import.meta.url).href;
+    } catch (e) {
+      return '';
+    }
+  };
+
+  // Small inline component to show poster image with icon fallback when image fails
+  const Poster: React.FC<{ event: any; size?: 'small' | 'large' }> = ({ event, size = 'small' }) => {
+    const [errored, setErrored] = React.useState(false);
+    const src = resolvePoster(event);
+    const imgClass = size === 'small' ? 'object-contain w-7 h-7' : 'object-contain w-10 h-10';
+    const iconSize = size === 'small' ? 28 : 40;
+    const Icon = event?.icon || Star;
+
+    if (src && !errored) {
+      return (
+        <img
+          src={src}
+          alt={`${event.title} poster`}
+          width={iconSize}
+          height={iconSize}
+          className={imgClass}
+          onError={() => setErrored(true)}
+        />
+      );
+    }
+
+    return <Icon size={iconSize} className="text-white" />;
+  };
 
   const coordinators = [
     {
@@ -419,16 +491,9 @@ const day1Events = [
 
   // Event Detail Page Component (for Day 2 posters)
   const EventDetailPage = ({ event }: { event: any }) => {
-    // Dynamically resolve poster file based on event title
-    // Normalize event title to match file names (remove spaces, special chars, uppercase)
-    const normalize = (str: string) => str.replace(/[^A-Za-z0-9]/g, '_').toUpperCase();
-    const posterFileName = normalize(event.title) + '.png';
-    let posterSrc = '';
-    try {
-      posterSrc = new URL(`./posters/${posterFileName}`, import.meta.url).href;
-    } catch (e) {
-      posterSrc = '';
-    }
+      // Prefer explicit poster path provided on the event (image or posterUrl).
+      // Only fallback to the old dynamic resolution by title when neither is available.
+      const posterSrc = resolvePoster(event);
     return (
       <div className="min-h-screen bg-gray-900 text-white overflow-x-hidden">
         {/* Animated Background */}
@@ -458,8 +523,8 @@ const day1Events = [
               transition={{ duration: 0.8 }}
               className="text-center mb-12"
             >
-              <div className={`w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r ${event.color} flex items-center justify-center`}>
-                <event.icon size={40} className="text-white" />
+              <div className={`w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r ${event.color} flex items-center justify-center overflow-hidden`}>
+                <Poster event={event} size="large" />
               </div>
               <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                 {event.title}
@@ -827,8 +892,8 @@ const day1Events = [
               >
                 <Card className="h-full backdrop-blur-lg bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20">
                   <CardHeader className="text-center">
-                    <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r ${event.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                      <event.icon size={28} className="text-white" />
+                    <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r ${event.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 overflow-hidden`}>
+                      <Poster event={event} size="small" />
                     </div>
                     <CardTitle className="text-xl text-white group-hover:text-cyan-300 transition-colors">
                       {event.title}
