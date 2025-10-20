@@ -106,7 +106,7 @@ const day1Events = [
     title: "BIZWHIZ",
     prize: "TBA",
     icon: Brain,
-    image: "./posters/BIZWHIZ.png",
+    image: "src/posters/BIZWHIZ.png",
     description: "Business Quiz Competition",
     color: "from-orange-400 to-red-500",
     fullDescription: "Test your business knowledge and current affairs awareness in this comprehensive quiz competition covering various business domains.",
